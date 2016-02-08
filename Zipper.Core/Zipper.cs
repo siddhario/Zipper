@@ -14,12 +14,14 @@ namespace Zipper.Core
     public static async Task Run(string root, string moveTo, long maxSizeInMB)
     {
       string[] files = Directory.GetFiles(root);
-      int fileCount = files.Length;
+
 
       long maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
       DirectoryInfo d = new DirectoryInfo(root);
-      FileInfo[] fileInfos = d.GetFiles();
+      FileInfo[] fileInfos = d.GetFiles("*.jpg");
+
+      int fileCount = fileInfos.Length;
 
       int i = 0;
       int fileIndex = 0;
@@ -29,11 +31,17 @@ namespace Zipper.Core
         List<FileInfo> fis = new List<FileInfo>();
         long totalSize = 0;
 
-        while (totalSize < maxSizeInBytes && fileIndex < fileCount)
+        while (fileIndex < fileCount)
         {
+
           fis.Add(fileInfos[fileIndex]);
           totalSize += fileInfos[fileIndex].Length;
+
           fileIndex++;
+          if (fileIndex >= fileCount)
+            break;
+          if (totalSize + fileInfos[fileIndex].Length > maxSizeInBytes)
+            break;
         }
 
         Console.WriteLine(string.Format("Creating package {0}", (i + 1).ToString()));

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,8 @@ namespace Zipper.Win
       long maxSizeInMB = (long)nudMaxSize.Value;
       await Zipper.Core.Zipper.Run(root, moveTo, maxSizeInMB);
       MessageBox.Show("Completed!");
+
+      Process.Start(moveTo);
     }
 
     private void btnSource_Click(object sender, EventArgs e)
